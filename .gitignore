@@ -1,0 +1,16 @@
+# Секреты (Supabase ключи и токены)
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Зависимости (не нужны в облаке)
+node_modules/
+__pycache__/
+.venv/
+
+# Сборка и временные файлы
+dist/
+build/
+.DS_Store
