@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useUser } from '../hooks/useUser';
 import { useTelegram } from '../hooks/useTelegram';
@@ -11,17 +12,23 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 export function ProfilePage() {
+  const nav = useNavigate();
   const { user, loading: userLoading } = useUser();
   const { user: tgUser } = useTelegram();
   const [history, setHistory] = useState<(Booking & { master_name?: string })[]>([]);
   const [svcNames, setSvcNames] = useState<Record<string, string>>({});
   const [loaded, setLoaded] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const telegramId = tgUser?.id ?? user?.telegram_id;
 
   useEffect(() => {
     if (!telegramId) return;
     (async () => {
+      // проверяем является ли пользователь админом
+      const { data: adminCheck } = await supabase.rpc('check_admin', { p_telegram_id: telegramId });
+      setIsAdmin(!!adminCheck);
+
       const { data } = await supabase.rpc('get_my_bookings', { p_telegram_id: telegramId });
       const bookings = (data as Booking[]) ?? [];
 
@@ -59,6 +66,25 @@ export function ProfilePage() {
         </div>
         <div className="profile-name">{displayFirst} {displayLast}</div>
       </div>
+
+      {/* кнопка Админ — видна только администраторам */}
+      {isAdmin && (
+        <button
+          onClick={() => nav('/admin')}
+          style={{
+            width: '100%', marginBottom: 16, padding: '12px',
+            background: 'rgba(201,161,77,0.1)', border: '1px solid var(--gold)',
+            borderRadius: 'var(--radius-md)', color: 'var(--gold)',
+            fontSize: 14, fontWeight: 500, display: 'flex', alignItems: 'center',
+            justifyContent: 'center', gap: 8
+          }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+          </svg>
+          Панель администратора
+        </button>
+      )}
 
       <div className="section-title">Мои записи</div>
       {!loaded && <div className="loader" style={{ minHeight: '20vh' }}>загрузка</div>}
