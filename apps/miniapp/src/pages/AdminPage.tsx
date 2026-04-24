@@ -308,20 +308,26 @@ function MastersTab({ masters, services, tgId, onReload }: {
           <input style={inputStyle} value={bio} onChange={e => setBio(e.target.value)} />
         </Field>
 
-        {/* График — 1 строка, подписи слева */}
+        {/* График — 1 строка */}
         <div style={{ marginBottom: 14 }}>
           <div style={labelStyle}>График</div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <select style={{ ...inputStyle, flex: 1 }} value={sType}
-              onChange={e => setSType(e.target.value)}>
-              <option value="5/2">5/2</option>
-              <option value="3/3">3/3</option>
-              <option value="2/2">2/2</option>
-            </select>
-            <input style={{ ...inputStyle, flex: 1 }} type="time" value={sStart}
-              onChange={e => setSStart(e.target.value)} />
-            <input style={{ ...inputStyle, flex: 1 }} type="time" value={sEnd}
-              onChange={e => setSEnd(e.target.value)} />
+          <div style={{ display: 'flex', gap: 8, overflow: 'hidden' }}>
+            <div style={{ flex: '1 1 0', minWidth: 0 }}>
+              <select style={{ ...inputStyle, width: '100%' }} value={sType}
+                onChange={e => setSType(e.target.value)}>
+                <option value="5/2">5/2</option>
+                <option value="3/3">3/3</option>
+                <option value="2/2">2/2</option>
+              </select>
+            </div>
+            <div style={{ flex: '1 1 0', minWidth: 0 }}>
+              <input style={{ ...inputStyle, width: '100%' }} type="time" value={sStart}
+                onChange={e => setSStart(e.target.value)} />
+            </div>
+            <div style={{ flex: '1 1 0', minWidth: 0 }}>
+              <input style={{ ...inputStyle, width: '100%' }} type="time" value={sEnd}
+                onChange={e => setSEnd(e.target.value)} />
+            </div>
           </div>
         </div>
 
@@ -480,14 +486,14 @@ function NewBookingTab({ masters, services, tgId, onCreated }: {
       })}
 
       <SectionTitle>Дата и время</SectionTitle>
-      <div style={{ display: 'flex', gap: 10, marginBottom: 14 }}>
-        <div style={{ flex: 1 }}>
+      <div style={{ display: 'flex', gap: 10, marginBottom: 14, overflow: 'hidden' }}>
+        <div style={{ flex: '1 1 0', minWidth: 0 }}>
           <div style={labelStyle}>Дата</div>
-          <input style={inputStyle} type="date" value={dt} onChange={e => setDt(e.target.value)} />
+          <input style={{ ...inputStyle, width: '100%' }} type="date" value={dt} onChange={e => setDt(e.target.value)} />
         </div>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: '1 1 0', minWidth: 0 }}>
           <div style={labelStyle}>Время</div>
-          <input style={inputStyle} type="time" value={tm} onChange={e => setTm(e.target.value)} />
+          <input style={{ ...inputStyle, width: '100%' }} type="time" value={tm} onChange={e => setTm(e.target.value)} />
         </div>
       </div>
 
